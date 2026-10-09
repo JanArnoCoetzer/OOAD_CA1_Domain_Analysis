@@ -1,0 +1,62 @@
+@startuml
+
+skinparam monochrome false
+skinparam shadowing true
+skinparam packageStyle rectangle
+skinparam defaultFontName "Arial"
+skinparam linetype ortho
+
+' --- ROW 1: INTAKE ORIGINS ---
+package "Intake" {
+    entity "Customer" as customer
+    entity "Sample Request" as sam_req
+    entity "Sampling Location" as sam_loc
+    entity "Sampling Point" as sam_pnt
+}
+
+' --- ROW 2: CORE LABORATORY TRACKING ---
+package "Core Tracking" {
+    entity "Partner Organisation" as partner
+    entity "Environmental Sample" as env_sam
+    entity "Chain of Custody Log" as custody
+    entity "Personnel" as personnel
+}
+
+' --- ROW 3: ANALYSIS & INFRASTRUCTURE ---
+package "Lab Operations" {
+    entity "Requested Test Assignment" as test_asg
+    entity "Instrument" as instrument
+    entity "Instrument Calibration & QC Log" as qc_log
+    entity "External Specialist Laboratory" as ext_lab
+}
+
+' --- ROW 4: DATA OUTPUTS ---
+package "Outputs" {
+    entity "Laboratory Report" as lab_rep
+}
+
+' --- LINEAR WORKFLOW RELATIONSHIPS ---
+customer --> sam_req : Submits
+sam_loc --> sam_pnt : Pinpoints
+sam_pnt --> env_sam : Sources
+sam_req --> env_sam : Groups
+
+partner --> env_sam : Transports
+env_sam --> custody : Records
+personnel --> custody : Signs
+
+env_sam --> test_asg : Dictates
+personnel --> test_asg : Analyzes
+instrument --> test_asg : Measures
+
+instrument --> qc_log : Logs
+personnel --> qc_log : Calibrates
+env_sam --> ext_lab : Refers
+
+sam_req --> lab_rep : Targets
+personnel --> lab_rep : Approves
+
+' Self-reference for portions
+env_sam --> env_sam : Splits
+
+@endum
