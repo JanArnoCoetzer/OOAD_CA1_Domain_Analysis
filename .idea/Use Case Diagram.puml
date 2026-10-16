@@ -1,0 +1,93 @@
+@startuml
+'__Layout Options__
+left to right direction
+skinparam packageStyle rectangle
+skinparam linetype polyline
+skinparam actor {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+skinparam usecase {
+    BackgroundColor LightSkyBlue
+    BorderColor RoyalBlue
+}
+
+
+
+'________Primary Actors________
+actor "Customer / Community Contact" as Customer
+actor "Reception Technician" as ReceptionTech
+actor "Field Technician" as FieldTech
+actor "Partner Organisation" as PartnerOrg
+actor "Quality Manager" as QualityMgr
+actor "Analyst" as Analyst
+actor "Laboratory Manager" as LabMgr
+actor "External Specialist Laboratory" as ExternalLab
+
+
+
+
+'________System Scope & Boundary________
+rectangle "KETCo Unified Digital Platform" {
+    
+    '________Intake Use Cases________
+    usecase "Submit Sample Request" as UC_SubmitRequest
+    usecase "Track Suitability Alerts" as UC_SuitabilityAlerts
+    usecase "Document Sample Conditions" as UC_SampleConditions
+    usecase "Generate Lab Reference ID" as UC_GenRefID
+    
+    ' ________Field & Tracking Use Cases________
+    usecase "Log GPS Coordinates" as UC_LogGPS
+    usecase "Start Custody Log" as UC_StartCustody
+    usecase "Synchronize Rural Drop-off Metadata" as UC_SyncMetadata
+    usecase "Split Parent Sample to Child Fractions" as UC_SplitSample
+    usecase "Accept Split Sample Portions" as UC_AcceptSplits
+    
+    ' ________Laboratory Operations Use Cases________
+    usecase "Log Raw Measurements" as UC_LogMeasurements
+    usecase "Run Instrument Calibration" as UC_RunCalibration
+    usecase "Authorize Version-Controlled Reports" as UC_AuthorizeReports
+    usecase "Monitor Ops Dashboards & Workflow Bottlenecks" as UC_MonitorDash
+}
+
+
+
+
+' ________Use Case Mappings________
+Customer -- UC_SubmitRequest
+Customer -- UC_SuitabilityAlerts
+
+ReceptionTech -- UC_SampleConditions
+ReceptionTech -- UC_GenRefID
+
+FieldTech -- UC_LogGPS
+FieldTech -- UC_StartCustody
+
+PartnerOrg -- UC_SyncMetadata
+
+Analyst -- UC_LogMeasurements
+Analyst -- UC_RunCalibration
+
+QualityMgr -- UC_AuthorizeReports
+
+LabMgr -- UC_MonitorDash
+
+ExternalLab -- UC_AcceptSplits
+
+
+
+
+'________Relationship Mappings________
+UC_SubmitRequest ..> UC_SuitabilityAlerts : <<include>>
+UC_SampleConditions ..> UC_GenRefID : <<include>>
+
+UC_LogGPS ..> UC_StartCustody : <<include>>
+UC_GenRefID ..> UC_SplitSample : <<include>>
+UC_SyncMetadata ..> UC_StartCustody : <<include>>
+UC_AcceptSplits ..> UC_SplitSample : <<include>>
+
+UC_RunCalibration ..> UC_LogMeasurements : <<include>>
+UC_AuthorizeReports ..> UC_MonitorDash : <<extend>>
+
+@enduml
