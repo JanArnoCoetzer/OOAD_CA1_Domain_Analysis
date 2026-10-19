@@ -1,0 +1,59 @@
+@startuml
+title Repository Structure
+
+<style>
+
+title {
+  FontColor #729bd8
+  FontSize 18
+  FontName sans-serif
+}
+</style>
+
+salt
+{
+{T
+ + ketco-unified-platform/
+ ++ .github/
+ +++ workflows/
+ ++++ backend-ci.yml
+ ++++ mobile-sync-ci.yml
+ ++ apps/
+ +++ web-portal/
+ ++++ src/
+ +++++ components/
+ +++++ hooks/
+ +++ mobile-field-app/
+ ++++ src/
+ +++++ cache/
+ +++++ sync/
+ +++++ location/
+ ++ services/
+ +++ core-api/
+ ++++ src/
+ +++++ intake/
+ +++++ tracking/
+ +++++ lab-ops/
+ +++++ reporting/
+ ++++ tests/
+ +++++ unit/
+ +++++ integration/
+ +++ notification-subsystem/
+ ++ libs/
+ +++ domain-models/
+ +++ validation-schemas/
+ +++ proto-definitions/
+ ++ database/
+ +++ migrations/
+ ++++ 001_init_tables.sql
+ ++++ 002_separate_spatial_mapping.sql
+ +++ seeds/
+ ++ docs/
+ +++ architecture-decision-records/
+ +++ api-specifications/
+ ++ .gitignore
+ ++ README.md
+ ++ mono-repo-config.json
+}
+}
+@enduml
