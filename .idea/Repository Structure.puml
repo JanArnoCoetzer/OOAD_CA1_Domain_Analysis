@@ -1,8 +1,13 @@
-@startuml
+@startsalt
 title Repository Structure
 
 <style>
-
+saltDiagram {
+  BackgroundColor #FFFFF
+  LineColor #2c3e50
+  FontColor #1a252f
+  FontName sans-serif
+}
 title {
   FontColor #729bd8
   FontSize 18
@@ -10,7 +15,8 @@ title {
 }
 </style>
 
-salt
+
+title Repository Structure
 {
 {T
  + ketco-unified-platform/
@@ -56,4 +62,5 @@ salt
  ++ mono-repo-config.json
 }
 }
-@enduml
+@endsalt
+
