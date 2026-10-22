@@ -1,0 +1,50 @@
+@startuml UC-101: Register Sample & Verify Suitability
+title UC-101: Register Sample & Verify Suitability\nActor: Reception Technician
+
+start
+
+:Select correct request ID;
+:Select sampling location and precise GPS Sampling Point;
+:Input sample type, collection time, collector ID,\ncontainer type, receipt temperature, and volume;
+
+' Fixing Deadlock: AF-2 modeled sequentially to ensure reliable token flow
+if (Operator requests split sample? [AF-2]) then (yes)
+  :Create sub-sample record;
+  :Copy original ID to parent reference field;
+  if (Test is external?) then (yes)
+    :Set external referral flag to true;
+    :Record external laboratory ID;
+  else (no)
+  endif
+else (no)
+endif
+
+:System generates unique laboratory reference ID;
+:System evaluates sample metrics against suitability matrix rules;
+
+if (Critical defect found?\n(Leak, Expired Time, or Wrong Container) [EF-1]) then (yes)
+  :Set status to "Rejected";
+  :Lock sample record;
+  :Notification subsystem sends alert to contact list within 5 minutes;
+  stop
+
+elseif (Metrics pass basic rules?) then (yes)
+  :Set status to "Accepted";
+
+else (Data Incomplete or Near Thresholds [AF-1])
+  :Prompt user for receipt condition notes;
+  :Input specific defects of the data;
+  :Set status to "Provisionally Accepted";
+  :Start 48-hour data rejection countdown timer;
+endif
+
+' Fixing Implicit Merge: Unified Merge Diamond before Step 7 Action Node
+if (Merge alternative workflows) then
+  ' Internal routing from Accepted or Provisionally Accepted branches
+endif
+
+:Create first row in Chain of Custody log\n(Location set to "Reception");
+:Show confirmation message to user;
+
+stop
+@enduml
